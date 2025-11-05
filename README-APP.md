@@ -44,16 +44,72 @@ NEXT_PUBLIC_QUICKBASE_USER_TOKEN=your-token-here
 
 ## Running the Application
 
-Development mode:
+### Development Mode
 ```bash
+# Run Next.js only
 npm run dev
+
+# Run Next.js + MCP Bridge together
+npm run dev:all
 ```
 
-Production build:
+### Production Build
 ```bash
 npm run build
 npm start
 ```
+
+## Deploying to Render
+
+### Step 1: Prerequisites
+1. A [Render account](https://render.com)
+2. Your code pushed to a GitHub repository
+3. QuickBase user token with appropriate permissions
+4. Anthropic API key
+
+### Step 2: Create Web Service on Render
+1. Go to your Render Dashboard
+2. Click "New +" and select "Web Service"
+3. Connect your GitHub repository
+4. Configure the service:
+   - **Name**: quickbase-mcp-client (or your preferred name)
+   - **Region**: Choose nearest to your users
+   - **Branch**: main
+   - **Root Directory**: Leave blank (or specify if needed)
+   - **Build Command**: `npm install && npm run build`
+   - **Start Command**: `npm start`
+
+### Step 3: Configure Environment Variables
+In the Render dashboard, add these environment variables:
+
+**Required:**
+- `QUICKBASE_USER_TOKEN`: Your QuickBase user token
+- `ANTHROPIC_API_KEY`: Your Anthropic API key
+
+**Optional (with defaults):**
+- `QUICKBASE_REALM_HOST`: Your QuickBase realm (default: `cmscontrols.quickbase.com`)
+- `QUICKBASE_APP_ID`: Your QuickBase app ID (default: `btfi6y34y`)
+- `NEXT_PUBLIC_APP_NAME`: App display name (default: `QuickBase MCP Client`)
+- `NEXT_PUBLIC_AUTO_CONNECT`: Auto-connect on load (default: `true`)
+- `MCP_PORT`: MCP Bridge port (default: `3003`)
+
+**Automatically Provided by Render:**
+- `PORT`: The port Next.js will run on (Render sets this automatically)
+
+### Step 4: Deploy
+1. Click "Create Web Service"
+2. Render will automatically build and deploy your app
+3. Once deployed, you'll receive a public URL (e.g., `https://your-app.onrender.com`)
+
+### Step 5: Configure Frontend to Use Deployed WebSocket
+The MCP Bridge runs on the same server, so update your environment to use the deployed domain:
+- `NEXT_PUBLIC_MCP_SERVER_URL`: Set to `wss://your-app.onrender.com:3003` (use `wss://` for secure WebSocket)
+
+### Notes
+- Render's free tier puts services to sleep after inactivity
+- First request after sleep may take 30-60 seconds
+- For production, consider upgrading to a paid tier for always-on service
+- The unified server (`server/render-server.js`) runs both Next.js and the MCP Bridge
 
 ## Usage
 
