@@ -764,29 +764,29 @@ export function AIChatInterface() {
 
   return (
     <Card className="flex flex-col h-full">
-      <div className="border-b p-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
-          <h2 className="font-semibold">QuickBase AI Assistant</h2>
-          <span className="text-sm text-muted-foreground">Powered by Claude 3.5 Sonnet</span>
+      <div className="border-b p-3 sm:p-4">
+        <div className="flex items-center gap-2 flex-wrap">
+          <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 text-primary" />
+          <h2 className="font-semibold text-sm sm:text-base">QuickBase AI Assistant</h2>
+          <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">Powered by Claude 3.5 Sonnet</span>
         </div>
       </div>
-      
-      <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
+
+      <ScrollArea className="flex-1 p-2 sm:p-4 pb-24 sm:pb-4" ref={scrollAreaRef}>
         <div className="space-y-4">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`flex gap-3 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
-              <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
+              <div className={`flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-full ${
                 message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted'
               }`}>
-                {message.role === 'user' ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                {message.role === 'user' ? <User className="h-3 w-3 sm:h-4 sm:w-4" /> : <Bot className="h-3 w-3 sm:h-4 sm:w-4" />}
               </div>
-              
-              <div className="flex flex-col gap-2 max-w-[80%]">
-                <Card className={`px-4 py-2 ${
+
+              <div className="flex flex-col gap-2 max-w-[95%] sm:max-w-[85%] lg:max-w-[80%]">
+                <Card className={`px-3 py-2 sm:px-4 sm:py-2 text-sm sm:text-base ${
                   message.role === 'user' ? 'bg-primary text-primary-foreground' : ''
                 }`}>
                   {message.role === 'assistant' && shouldBeCollapsible(message.content) ? (
@@ -851,34 +851,37 @@ export function AIChatInterface() {
         </div>
       </ScrollArea>
       
-      <div className="p-4 border-t">
+      <div className="p-2 sm:p-4 border-t fixed sm:relative bottom-0 left-0 right-0 bg-card z-10 sm:z-auto">
         <div className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
-            placeholder="Ask me anything about your QuickBase data..."
+            placeholder="Ask me anything..."
             disabled={isProcessing}
+            className="h-11 sm:h-10 text-base sm:text-sm"
           />
-          <Button onClick={handleSend} disabled={isProcessing || !input.trim()}>
-            {isProcessing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+          <Button onClick={handleSend} disabled={isProcessing || !input.trim()} className="h-11 w-11 sm:h-10 sm:w-10 flex-shrink-0">
+            {isProcessing ? <Loader2 className="h-5 w-5 sm:h-4 sm:w-4 animate-spin" /> : <Send className="h-5 w-5 sm:h-4 sm:w-4" />}
           </Button>
         </div>
-        
+
         <div className="flex gap-2 mt-2 flex-wrap">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setInput('What tables do I have?')}
             disabled={isProcessing}
+            className="h-9 text-xs sm:text-sm"
           >
-            What tables do I have?
+            What tables?
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setInput('Test my QuickBase connection')}
             disabled={isProcessing}
+            className="h-9 text-xs sm:text-sm"
           >
             Test connection
           </Button>
@@ -887,6 +890,7 @@ export function AIChatInterface() {
             size="sm"
             onClick={() => setInput('Show me recent records')}
             disabled={isProcessing}
+            className="h-9 text-xs sm:text-sm hidden sm:inline-flex"
           >
             Show records
           </Button>
