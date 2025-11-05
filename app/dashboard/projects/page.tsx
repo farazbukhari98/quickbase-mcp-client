@@ -77,8 +77,8 @@ export default function ProjectsPage() {
 
   if (error) {
     return (
-      <div className="p-8 flex items-center justify-center min-h-screen">
-        <Card className="p-6 max-w-md">
+      <div className="p-4 sm:p-8 flex items-center justify-center min-h-screen">
+        <Card className="p-6 max-w-md w-full">
           <div className="flex items-center gap-2 text-destructive mb-4">
             <AlertCircle className="h-5 w-5" />
             <h3 className="font-semibold">Error Loading Projects</h3>
@@ -86,7 +86,7 @@ export default function ProjectsPage() {
           <p className="text-sm text-muted-foreground mb-4">
             {error instanceof Error ? error.message : 'Failed to load projects'}
           </p>
-          <Button onClick={handleRefresh} variant="outline">
+          <Button onClick={handleRefresh} variant="outline" className="w-full sm:w-auto">
             <RefreshCw className="h-4 w-4 mr-2" />
             Try Again
           </Button>
@@ -96,20 +96,20 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 sm:p-6 lg:p-8">
       {/* Header */}
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-6 sm:mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Active Projects</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold">Active Projects</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             {isLoading ? 'Loading...' : `${filteredProjects.length} projects`}
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <span className="text-xs text-muted-foreground">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4 w-full sm:w-auto">
+          <span className="text-xs text-muted-foreground hidden sm:inline">
             Last updated: {dataUpdatedAt ? formatDistanceToNow(new Date(dataUpdatedAt), { addSuffix: true }) : 'Never'}
           </span>
-          <Button onClick={handleRefresh} variant="outline" size="sm" disabled={isLoading}>
+          <Button onClick={handleRefresh} variant="outline" size="sm" disabled={isLoading} className="w-full sm:w-auto">
             <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
           </Button>
@@ -117,45 +117,47 @@ export default function ProjectsPage() {
       </div>
 
       {/* Filters */}
-      <div className="mb-6 flex flex-col md:flex-row gap-4">
-        <div className="relative flex-1">
+      <div className="mb-4 sm:mb-6 flex flex-col gap-3 sm:gap-4">
+        <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search projects..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-9"
+            className="pl-9 h-11"
           />
         </div>
-        <Select value={managerFilter} onValueChange={setManagerFilter}>
-          <SelectTrigger className="w-full md:w-48">
-            <SelectValue placeholder="Filter by manager" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Managers</SelectItem>
-            {managers.map(manager => (
-              <SelectItem key={manager} value={manager}>{manager}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
-          <SelectTrigger className="w-full md:w-40">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="health">Health Score</SelectItem>
-            <SelectItem value="name">Name</SelectItem>
-            <SelectItem value="budget">Budget</SelectItem>
-            <SelectItem value="progress">Progress</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Select value={managerFilter} onValueChange={setManagerFilter}>
+            <SelectTrigger className="w-full sm:w-48 h-11">
+              <SelectValue placeholder="Filter by manager" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Managers</SelectItem>
+              {managers.map(manager => (
+                <SelectItem key={manager} value={manager}>{manager}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+            <SelectTrigger className="w-full sm:w-40 h-11">
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="health">Health Score</SelectItem>
+              <SelectItem value="name">Name</SelectItem>
+              <SelectItem value="budget">Budget</SelectItem>
+              <SelectItem value="progress">Progress</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Projects Grid */}
       {isLoading ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {[...Array(6)].map((_, i) => (
-            <Card key={i} className="p-6">
+            <Card key={i} className="p-4 sm:p-6">
               <div className="animate-pulse space-y-4">
                 <div className="h-4 bg-gray-200 rounded w-3/4"></div>
                 <div className="h-3 bg-gray-200 rounded w-1/2"></div>
@@ -165,24 +167,24 @@ export default function ProjectsPage() {
           ))}
         </div>
       ) : filteredProjects.length === 0 ? (
-        <Card className="p-12 text-center">
+        <Card className="p-8 sm:p-12 text-center">
           <p className="text-muted-foreground">No projects found matching your filters</p>
         </Card>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {filteredProjects.map((project) => (
-            <Card key={project.id} className="p-6 hover:shadow-lg transition-shadow">
+            <Card key={project.id} className="p-4 sm:p-6 hover:shadow-lg transition-shadow">
               {/* Project Header */}
               <div className="mb-4">
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="font-semibold text-lg">
+                <div className="flex items-start justify-between mb-2 gap-2">
+                  <h3 className="font-semibold text-base sm:text-lg truncate">
                     {project.projectNumber}
                   </h3>
-                  <Badge variant={getHealthBadge(project.healthScore)}>
+                  <Badge variant={getHealthBadge(project.healthScore)} className="flex-shrink-0">
                     {project.healthScore}/100
                   </Badge>
                 </div>
-                <p className="text-sm text-muted-foreground line-clamp-2">
+                <p className="text-xs sm:text-sm text-muted-foreground line-clamp-2">
                   {project.projectName}
                 </p>
               </div>
@@ -238,9 +240,9 @@ export default function ProjectsPage() {
               </div>
 
               {/* Actions */}
-              <div className="mt-4 flex gap-2">
+              <div className="mt-4 flex flex-col sm:flex-row gap-2">
                 <Link href={`/dashboard/projects/${project.id}`} className="flex-1">
-                  <Button variant="outline" size="sm" className="w-full">
+                  <Button variant="outline" size="sm" className="w-full h-10">
                     View Details
                   </Button>
                 </Link>
@@ -252,6 +254,7 @@ export default function ProjectsPage() {
                     number: project.projectNumber,
                     name: project.projectName
                   })}
+                  className="w-full sm:w-auto h-10"
                 >
                   <Sparkles className="h-4 w-4 mr-1" />
                   AI Summary
